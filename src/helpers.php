@@ -1,0 +1,29 @@
+<?php
+
+namespace tuefekci\helpers;
+
+/**
+* Helpers Init Class
+*
+* This class offers function and helpers for working with the included helpers in this package.
+*
+* @author Giacomo Tüfekci
+* @package tuefekci\helpers
+*/
+class Init
+{
+    /**
+     * Sample method
+     *
+     * Always create a corresponding DocBlock for each method, describing what it is for,
+     * this helps the PhpDocumentor to properly generate the documentation
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function sayHello(string $name): string
+    {
+        return sprintf("Hello %s!", ucfirst($name));
+    }
+}
