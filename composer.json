@@ -1,7 +1,7 @@
 {
     "name": "tuefekci/helpers",
-    "description": "Basic composer package template for creating other packages.",
-    "homepage": "http://github.com/tuefekci/composer-package-template",
+    "description": "My PHP Helpers",
+    "homepage": "https://github.com/tuefekci/helpers",
     "keywords": [
         "helpers"
     ],
