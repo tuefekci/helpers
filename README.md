@@ -1,14 +1,5 @@
-Composer Package Template
+My PHP Helpers
 ============
-
-[![Latest Stable Version](https://poser.pugx.org/gino-pane/composer-package-template/v/stable)](https://packagist.org/packages/gino-pane/composer-package-template)
-[![License](https://poser.pugx.org/gino-pane/composer-package-template/license)](https://packagist.org/packages/gino-pane/composer-package-template)
-[![composer.lock](https://poser.pugx.org/gino-pane/composer-package-template/composerlock)](https://packagist.org/packages/gino-pane/composer-package-template)
-[![Total Downloads](https://poser.pugx.org/gino-pane/composer-package-template/downloads)](https://packagist.org/packages/gino-pane/composer-package-template)
-
-If you are trying to create a new PHP Composer package, whether it is going to be submitted to [packagist.org](packagist.org) 
-or just to exist in your Github account, this template package of files will surely help you make the process a lot easier 
-and faster.
 
 Requirements
 ------------
