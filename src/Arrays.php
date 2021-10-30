@@ -12,41 +12,57 @@ namespace tuefekci\helpers;
 */
 class Arrays
 {
-
     public function __construct()
     {
         return $this;
     }
 
     /**
-     * first
-     *
-     * Get first array element.
-     *
-     * @param array $array
-     * @return void element
-     */
+    * Get the first element of an array.
+    *
+    * @param array $array The array to get the first element from.
+    * @return mixed The first element of the array.
+    */
     public static function first(array $array)
     {
-        return $array[array_key_first($array)];
+        return $array[self::firstKey($array)];
     }
 
     /**
-     * last
-     *
-     * Get last array element.
-     *
-     * @param array $array
-     * @return void element
-     */
+    * Get the last element of an array.
+    *
+    * @param array $array The array to get the last element from.
+    * @return mixed The last element of the array.
+    */
     public static function last(array $array)
     {
-        return $array[array_key_last($array)];
+        return $array[self::lastKey($array)];
+    }
+
+
+    /**
+    * Get the first key of an array.
+    *
+    * @param array $array The array to get the first key from.
+    * @return mixed The first key of the array.
+    */
+    public static function firstKey(array $array)
+    {
+        return array_key_first($array);
     }
 
     /**
-     * prev
-     *
+    * Get the last key of an array.
+    *
+    * @param array $array The array to get the last key from.
+    * @return mixed The last key of the array.
+    */
+    public static function lastKey(array $array)
+    {
+        return array_key_last($array);
+    }
+
+    /**
      * Get previous array element.
      *
      * @param array $array
@@ -65,8 +81,6 @@ class Arrays
     }
 
     /**
-     * next
-     *
      * Get next array element.
      *
      * @param array $array
@@ -85,8 +99,6 @@ class Arrays
     }
     
     /**
-     * neighbor keys
-     *
      * Get keys of the neighboring array elements.
      *
      * @param array $array
@@ -114,8 +126,6 @@ class Arrays
         return $return;
     }
     /**
-     * neighbors
-     *
      * Get neighboring array elements.
      *
      * @param array $array

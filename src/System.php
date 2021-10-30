@@ -1,5 +1,7 @@
 <?php
 
+namespace tuefekci\helpers;
+
 class System
 {
 
@@ -8,10 +10,41 @@ class System
      * @var Singleton
      */
     private static $instance;
+    private static $state = array();
 
-    public function isWin()
+    public static function isWin()
     {
         return stristr(PHP_OS, 'win');
+    }
+
+    public static function isDocker(): bool
+    {
+        if(empty(self::$state['isDocker'])) {
+
+            if(!empty($_SERVER['DOCKER_HOST'])) {
+                return self::$state['isDocker'] = true;
+            }
+
+            if(!empty(getenv('IS_DOCKER'))) {
+                return self::$state['isDocker'] = true;
+            }
+
+            // last way of checking
+            $processStack = explode(PHP_EOL, shell_exec('cat /proc/self/cgroup'));
+            $processStack = array_filter($processStack); // remove empty item made by EOL
+        
+            foreach ($processStack as $process) {
+                if (strpos($process, 'docker') === false) {
+                    return false;
+                }
+            }
+        
+            return true;
+           
+        } else {
+            return self::$state['isDocker'];
+        }
+
     }
 
 	private function windowsWmic(string $type, string $value) 
