@@ -96,6 +96,4 @@ class System
 	{
         return round(memory_get_usage(true)/1000);
     }
-
-
 }

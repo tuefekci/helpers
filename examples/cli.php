@@ -8,6 +8,8 @@
  */
 require_once(realpath(__DIR__ . '/../vendor/autoload.php'));
 
+\tuefekci\helpers\Cli::banner("blkhole", "https://github.com/tuefekci/blkhole");
+
 $cli = new \tuefekci\helpers\Cli();
 $cli->log("INFO", "dyntest1");
 $cli->log("INFO", "dyntest2");

@@ -13,7 +13,7 @@ abstract class LogType extends BasicEnum {
 }
 
 /**
- * Log Class
+ * Logger Class
  *
  * This class offers implementing of a \Psr\Log\LoggerInterface (PSR-3) and some adjustments
  *
@@ -21,7 +21,7 @@ abstract class LogType extends BasicEnum {
  * @package tuefekci\helpers
  */
 
-class Log extends AbstractLogger
+class Logger extends AbstractLogger
 {
 
 	protected $min_level = LogLevel::DEBUG;

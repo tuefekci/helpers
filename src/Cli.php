@@ -35,6 +35,32 @@ class Cli
         return self::$instance;
     }
 
+
+    public static function banner(string $name=null, string $url=null) {
+      $_this = self::getInstance();
+
+      $_this->climate->clear();
+      $_this->climate->break();
+      $_this->climate->lightGreen()->border("/");
+
+
+      $_this->climate->lightGreen()->inline('//');
+      if($name) {
+        $_this->climate->lightGreen()->inline(' '.$name.'');
+      }
+    
+      $_this->climate->lightGreen()->inline(' (c) 2020-'.date("Y").' Giacomo Tüfekci');
+      $_this->climate->lightGreen()->break();
+
+      if($url) {
+        $_this->climate->lightGreen()->out('// '.$url);
+      }
+
+      $_this->climate->lightGreen()->border("/");
+      $_this->climate->lightGreen()->break();
+
+    }
+
     public static function Log($level, $message, $timestamp = null) {
       $_this = self::getInstance();
 
@@ -80,7 +106,7 @@ class Cli
 
       $background = "background".$backgroundColor;
 
-      $_this->climate->$background()->$color()->out('[' . $timestamp . '] ' . strtoupper($level) . ': ' . $message);
+      $_this->climate->$background()->$color()->out('// [' . $timestamp . '] ' . strtoupper($level) . ': ' . $message);
 
       return $_this;
     }
