@@ -15,7 +15,7 @@ class Store
 	/**
 	* @var array
 	*/
-	private static $data = [];
+	private $data = [];
     private static $instance;
 
     public function __construct()
