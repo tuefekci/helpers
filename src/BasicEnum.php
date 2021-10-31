@@ -1,5 +1,6 @@
 <?php
 
+namespace tuefekci\helpers;
 	/**
 	 * BasicEnum
 	 *

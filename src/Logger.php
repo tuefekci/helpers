@@ -40,6 +40,14 @@ class Logger extends AbstractLogger
 		LogType::FILE,
 	];
 
+	/**
+     * @var int How much call stack information (file name and line number) should be logged for each log message.
+     *
+     * If it is greater than 0, at most that number of call stacks will be logged.
+     * Note that only application call stacks are counted.
+     */
+    private int $traceLevel = 0;
+
 	public function __construct($min_level = LogLevel::DEBUG, $type = LogType::CLI)
 	{
 		$this->min_level = $min_level;
@@ -80,8 +88,11 @@ class Logger extends AbstractLogger
 			return $message;
 		}
 
+
+
 		$replacements = array();
 		foreach ($context as $key => $val) {
+
 			if (null === $val || is_scalar($val) || (\is_object($val) && method_exists($val, '__toString'))) {
 				$replacements["{{$key}}"] = $val;
 			} elseif ($val instanceof \DateTimeInterface) {
@@ -91,6 +102,7 @@ class Logger extends AbstractLogger
 			} else {
 				$replacements["{{$key}}"] = '[' . \gettype($val) . ']';
 			}
+
 		}
 
 		return strtr($message, $replacements);
@@ -102,7 +114,7 @@ class Logger extends AbstractLogger
 	 * @param array $context
 	 * @return string
 	 */
-	protected function format($level, $message, $context)
+	protected function format($level, $message, array $context)
 	{
 		return '[' . date('Y-m-d H:i:s'). '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context) . "\n";
 	}
@@ -112,6 +124,16 @@ class Logger extends AbstractLogger
 		if (!$this->min_level_reached($level)) {
 			return;
 		}
+
+		if (($message instanceof Throwable) && !isset($context['exception'])) {
+            // exceptions are string-convertible, thus should be passed as it is to the logger
+            // if exception instance is given to produce a stack trace, it MUST be in a key named "exception".
+            $context['exception'] = $message;
+        }
+
+		$context['time'] ??= microtime(true);
+        $context['trace'] ??= $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+        $context['memory'] ??= memory_get_usage();
 
 		if($this->type == LogType::CLI) {
 			\tuefekci\helpers\Cli::log($level, $this->interpolate($message, $context));
@@ -124,6 +146,40 @@ class Logger extends AbstractLogger
 		}
 
 	}
+
+	    /**
+     * Collects a trace when tracing is enabled with {@see Logger::setTraceLevel()}.
+     *
+     * @param array $backtrace The list of call stack information.
+     *
+     * @return array Collected a list of call stack information.
+     */
+    private function collectTrace(array $backtrace): array
+    {
+        $traces = [];
+
+        if ($this->traceLevel > 0) {
+            $count = 0;
+
+            foreach ($backtrace as $trace) {
+                if (isset($trace['file'], $trace['line'])) {
+                    $excludedMatch = array_filter($this->excludedTracePaths, static function ($path) use ($trace) {
+                        return strpos($trace['file'], $path) !== false;
+                    });
+
+                    if (empty($excludedMatch)) {
+                        unset($trace['object'], $trace['args']);
+                        $traces[] = $trace;
+                        if (++$count >= $this->traceLevel) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $traces;
+    }
 
 
 
