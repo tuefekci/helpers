@@ -19,6 +19,9 @@ class System
 
     public static function isDocker(): bool
     {
+
+        // TODO: This does not work reliable at the moment
+
         if(empty(self::$state['isDocker'])) {
 
             if(!empty($_SERVER['DOCKER_HOST'])) {
