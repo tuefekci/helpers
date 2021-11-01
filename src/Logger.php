@@ -85,7 +85,7 @@ class Logger extends AbstractLogger
 	protected function interpolate($message, array $context)
 	{
 		if (false === strpos($message, '{')) {
-			return $message;
+			//return $message;
 		}
 
 
@@ -125,7 +125,7 @@ class Logger extends AbstractLogger
 			return;
 		}
 
-		if (($message instanceof Throwable) && !isset($context['exception'])) {
+		if (($message instanceof \Throwable) && !isset($context['exception'])) {
             // exceptions are string-convertible, thus should be passed as it is to the logger
             // if exception instance is given to produce a stack trace, it MUST be in a key named "exception".
             $context['exception'] = $message;
