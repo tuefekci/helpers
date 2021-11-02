@@ -48,6 +48,8 @@ class Logger extends AbstractLogger
      */
     private int $traceLevel = 0;
 
+	private array $logHistory = [];
+
 	public function __construct($min_level = LogLevel::DEBUG, $type = LogType::CLI)
 	{
 		$this->min_level = $min_level;
@@ -131,13 +133,22 @@ class Logger extends AbstractLogger
             $context['exception'] = $message;
         }
 
-		if($level == "DEBUG" && isset($context['exception'])) {
-			var_dump($context['exception']);
+		if(isset($context['exception'])) {
+			$context['time'] = microtime(true);
+			$context['trace'] = $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+			$context['memory'] = memory_get_usage();
+			$context['memory_peak'] = memory_get_peak_usage();
 		}
 
-		$context['time'] ??= microtime(true);
-        $context['trace'] ??= $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
-        $context['memory'] ??= memory_get_usage();
+		if(isset($context['exception'])) {
+			if($level == LogLevel::DEBUG OR $level == LogLevel::ERROR) {
+				if($this->type == LogType::CLI OR $this->type == LogType::ECHO) {
+					// TODO: Replace with something better
+					var_dump($context);
+				}
+			}
+
+		}
 
 		if($this->type == LogType::CLI) {
 			\tuefekci\helpers\Cli::log($level, $this->interpolate($message, $context));
@@ -146,12 +157,16 @@ class Logger extends AbstractLogger
 		} elseif($this->type == LogType::ECHO) {
 			echo $this->format($level, $message, $context);	
 		} elseif($this->type == LogType::ARRAY) {
-			// TODO: Implement Array logging
+			$this->logHistory[] = [
+				'level' => $level,
+				'message' => $message,
+				'context' => $context
+			];
 		}
 
 	}
 
-	    /**
+	/**
      * Collects a trace when tracing is enabled with {@see Logger::setTraceLevel()}.
      *
      * @param array $backtrace The list of call stack information.
