@@ -298,25 +298,23 @@ class Strings
         return number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
     }
 
-    /**
-	* normalizes a string for filesystem etc.
-	*
-	* @param string $string
-	* @return string
-	*/
-    public static function normalizeString ($str = '')
+    public static function sanitizeFilename($filename)
     {
-        $str = strip_tags($str); 
-        $str = preg_replace('/[\r\n\t ]+/', ' ', $str);
-        $str = preg_replace('/[\"\*\/\:\<\>\?\'\|]+/', ' ', $str);
-        $str = strtolower($str);
-        $str = html_entity_decode( $str, ENT_QUOTES, "utf-8" );
-        $str = htmlentities($str, ENT_QUOTES, "utf-8");
-        $str = preg_replace("/(&)([a-z])([a-z]+;)/i", '$2', $str);
-        $str = str_replace(' ', '-', $str);
-        $str = rawurlencode($str);
-        $str = str_replace('%', '-', $str);
-        return $str;
+        $filename = preg_replace('/[^a-z0-9_\-\.]/i', '', $filename);
+        return $filename;
     }
+
+    public static function sanitizePath($path)
+    {
+        $path = preg_replace('/[^a-z0-9_\-\/]/i', '', $path);
+        return $path;
+    }
+
+    public static function sanitizeUrl($url)
+    {
+        $url = preg_replace('/[^a-z0-9_\-\/]/i', '', $url);
+        return $url;
+    }
+
 
 }
