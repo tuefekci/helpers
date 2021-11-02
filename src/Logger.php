@@ -131,6 +131,10 @@ class Logger extends AbstractLogger
             $context['exception'] = $message;
         }
 
+		if($level == "DEBUG" && isset($context['exception'])) {
+			var_dump($context['exception']);
+		}
+
 		$context['time'] ??= microtime(true);
         $context['trace'] ??= $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
         $context['memory'] ??= memory_get_usage();
