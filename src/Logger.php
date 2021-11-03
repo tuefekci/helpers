@@ -142,12 +142,6 @@ class Logger extends AbstractLogger
 			$message = $message->getMessage();
         }
 
-		var_dump($level);
-		var_dump($this->levels);
-		var_dump($this->min_level_reached($level));
-		var_dump(\array_search($level, $this->levels));
-		var_dump($context);
-
 		if(isset($context['exception'])) {
 
 			$context['time'] = microtime(true);
