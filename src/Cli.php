@@ -61,7 +61,7 @@ class Cli
 
     }
 
-    public static function Log($level, $message, $timestamp = null) {
+    public static function Log(string $level, string $message, int $timestamp = null) {
       $_this = self::getInstance();
 
       if (is_null($timestamp)) {
@@ -71,31 +71,31 @@ class Cli
       $backgroundColor = "Black";
 
       switch ($level) {
-        case "DEBUG":
+        case "debug":
           $color = "LightBlue";
           break;
-        case "INFO":
+        case "info":
           $color = "LightCyan";
           break;
-        case "NOTICE":
+        case "notice":
           $color = "LightYellow";
           break;
-        case "WARNING":
+        case "warning":
           $color = "Yellow";
           break;
-        case "ERROR":
+        case "error":
           $color = "White";
           $backgroundColor = "Red";
           break;
-        case "CRITICAL":
+        case "critical":
           $color = "White";
           $backgroundColor = "Red";
           break;
-        case "ALERT":
+        case "alert":
           $color = "White";
           $backgroundColor = "Red";
           break;
-        case "EMERGENCY":
+        case "emergency":
           $color = "White";
           $backgroundColor = "Red";
           break;

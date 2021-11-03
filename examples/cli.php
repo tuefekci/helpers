@@ -33,3 +33,5 @@ $cli->log("INFO", "dyntest3");
 $cli->log("INFO", "dyntest4");
 $cli->log("INFO", "dyntest5");
 
+
+//\tuefekci\helpers\Cli::log("ERROR", "test8", ['exception' => new \Exception("test exception")]);

@@ -92,7 +92,7 @@ class Logger extends AbstractLogger
 	protected function interpolate($message, array $context)
 	{
 		if (false === strpos($message, '{')) {
-			//return $message;
+			return $message;
 		}
 
 
@@ -128,6 +128,9 @@ class Logger extends AbstractLogger
 
 	public function log($level, $message, array $context = array())
 	{
+
+		$level = strtolower($level);
+
 		if (!$this->min_level_reached($level)) {
 			return;
 		}
@@ -136,16 +139,22 @@ class Logger extends AbstractLogger
             // exceptions are string-convertible, thus should be passed as it is to the logger
             // if exception instance is given to produce a stack trace, it MUST be in a key named "exception".
             $context['exception'] = $message;
+			$message = $message->getMessage();
         }
 
+		var_dump($level);
+		var_dump($this->levels);
+		var_dump($this->min_level_reached($level));
+		var_dump(\array_search($level, $this->levels));
+		var_dump($context);
+
 		if(isset($context['exception'])) {
+
 			$context['time'] = microtime(true);
 			$context['trace'] = $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 			$context['memory'] = memory_get_usage();
 			$context['memory_peak'] = memory_get_peak_usage();
-		}
 
-		if(isset($context['exception'])) {
 			if($level == LogLevel::DEBUG OR $level == LogLevel::ERROR) {
 				if($this->type == LogType::CLI OR $this->type == LogType::ECHO) {
 					// TODO: Replace with something better
