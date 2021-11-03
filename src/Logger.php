@@ -155,10 +155,10 @@ class Logger extends AbstractLogger
 				if($this->type == LogType::CLI OR $this->type == LogType::ECHO) {
 					// TODO: Replace with something better
 
-					$debugMsg .= PHP_EOL;
-					$debugMsg .= PHP_EOL;
-
 					Cli::climate()->output->get('buffer')->clean();
+
+					Cli::climate()->to('buffer')->break();
+					Cli::climate()->to('buffer')->break();
 
 					$line = '';
 					$line .= '┌';
@@ -231,13 +231,14 @@ class Logger extends AbstractLogger
 					//$line .= '┘';
 					Cli::climate()->to('buffer')->buffer($line);
 
+					Cli::climate()->to('buffer')->break();
+					Cli::climate()->to('buffer')->break();
 
 					// END
 					$debugMsg .= Cli::climate()->output->get('buffer')->get();
 					Cli::climate()->output->get('buffer')->clean();
 
-					$debugMsg .= PHP_EOL;
-					$debugMsg .= PHP_EOL;
+
 				}
 			}
 
