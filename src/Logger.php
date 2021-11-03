@@ -214,6 +214,9 @@ class Logger extends AbstractLogger
 
 					Cli::climate()->to('buffer')->buffer("│");
 
+
+					//Amp\Parallel\Worker\TaskFailureException::getOriginalTrace
+
 					$getPrevious = $context['exception']->getPrevious();
 					$getPrevious = explode("\n", $getPrevious);
 
