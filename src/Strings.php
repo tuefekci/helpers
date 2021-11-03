@@ -200,6 +200,19 @@ class Strings
         return static::random($length, self::removeNonAlphanumeric($chars));
     }
 
+    /**
+     * Returns a random number of a given length.
+     *
+     * @param int $length The length of the string
+     * @param string $chars The characters to use for the string
+     * @return string
+     */
+    public static function random_int($length = 8, $chars = '0123456789')
+    {
+        return static::random($length, self::removeNonNumeric($chars));
+    }
+
+
 	/**
 	* Removes all non-ASCII characters from a string.
 	*
