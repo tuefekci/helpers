@@ -46,7 +46,12 @@ class Logger extends AbstractLogger
      * If it is greater than 0, at most that number of call stacks will be logged.
      * Note that only application call stacks are counted.
      */
-    private int $traceLevel = 0;
+    private int $traceLevel = 2;
+
+    /**
+     * @var string[] Array of paths to exclude from tracing when tracing is enabled with {@see Logger::setTraceLevel()}.
+     */
+    private array $excludedTracePaths = [];
 
 	private array $logHistory = [];
 
