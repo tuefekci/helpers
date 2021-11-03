@@ -27,6 +27,12 @@ class Cli
       return $this;
     }
 
+
+    public static function climate()
+    {
+      return self::$instance->climate;
+    }
+
     private static function getInstance()
     {
         if (is_null(self::$instance)) {

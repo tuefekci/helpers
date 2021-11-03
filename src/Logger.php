@@ -130,6 +130,7 @@ class Logger extends AbstractLogger
 	{
 
 		$level = strtolower($level);
+		$debugMsg = "";
 
 		if (!$this->min_level_reached($level)) {
 			return;
@@ -145,21 +146,105 @@ class Logger extends AbstractLogger
 		if(isset($context['exception'])) {
 
 			$context['time'] = microtime(true);
-			$context['trace'] = $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+			//$context['trace'] = $this->collectTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 			$context['memory'] = memory_get_usage();
 			$context['memory_peak'] = memory_get_peak_usage();
 
+			// $min_level = LogLevel::DEBUG;
 			if($level == LogLevel::DEBUG OR $level == LogLevel::ERROR) {
 				if($this->type == LogType::CLI OR $this->type == LogType::ECHO) {
 					// TODO: Replace with something better
-					var_dump($context);
+
+					$debugMsg .= PHP_EOL;
+					$debugMsg .= PHP_EOL;
+
+					Cli::climate()->output->get('buffer')->clean();
+
+					$line = '';
+					$line .= '┌';
+					for($i = 0; $i < 100; $i++) {
+						$line .= '─';
+					}
+					//$line .= '┐';
+					Cli::climate()->to('buffer')->buffer($line);
+
+					Cli::climate()->to('buffer')->bold("│ Exception(" .$context['exception']->getCode()."): ". $context['exception']->getMessage());
+					//Cli::climate()->to('buffer')->border('-');
+
+					$data = [
+						[
+							'│ Time: '.date('Y-m-d H:i:s', $context['time']), 
+							'Memory: '.Strings::filesizeFormatted($context['memory']), 
+							'Memory Peak: '.Strings::filesizeFormatted($context['memory_peak'])
+						]
+					];
+					
+					Cli::climate()->to('buffer')->columns($data);
+
+
+					$line = '';
+					$line .= '├';
+					for($i = 0; $i < 100; $i++) {
+						$line .= '─';
+					}
+					//$line .= '┤';
+					Cli::climate()->to('buffer')->buffer($line);
+
+
+
+					Cli::climate()->to('buffer')->buffer("│ Line: ".$context['exception']->getLine()." -> ". $context['exception']->getFile());
+
+
+					$line = '';
+					$line .= '├';
+					for($i = 0; $i < 100; $i++) {
+						$line .= '─';
+					}
+					//$line .= '┤';
+					Cli::climate()->to('buffer')->buffer($line);
+
+
+					$trace = $context['exception']->getTraceAsString();
+					$trace = explode("\n", $trace);
+
+					Cli::climate()->to('buffer')->buffer("│ Trace: ");
+					foreach($trace as $line) {
+						Cli::climate()->to('buffer')->buffer("│ ".$line);
+					}
+
+					Cli::climate()->to('buffer')->buffer("│");
+
+					$getPrevious = $context['exception']->getPrevious();
+					$getPrevious = explode("\n", $getPrevious);
+
+					Cli::climate()->to('buffer')->buffer("│ Previous: ");
+					foreach($getPrevious as $line) {
+						Cli::climate()->to('buffer')->buffer("│ ".$line);
+					}
+
+
+					$line = '';
+					$line .= '└';
+					for($i = 0; $i < 100; $i++) {
+						$line .= '─';
+					}
+					//$line .= '┘';
+					Cli::climate()->to('buffer')->buffer($line);
+
+
+					// END
+					$debugMsg .= Cli::climate()->output->get('buffer')->get();
+					Cli::climate()->output->get('buffer')->clean();
+
+					$debugMsg .= PHP_EOL;
+					$debugMsg .= PHP_EOL;
 				}
 			}
 
 		}
 
 		if($this->type == LogType::CLI) {
-			\tuefekci\helpers\Cli::log($level, $this->interpolate($message, $context));
+			\tuefekci\helpers\Cli::log($level, $this->interpolate($message, $context).$debugMsg);
 		} elseif($this->type == LogType::FILE) {
 			// TODO: Implement File logging
 		} elseif($this->type == LogType::ECHO) {
