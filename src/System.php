@@ -106,12 +106,17 @@ class System
     // =========================================================================
     // get Hardware Info functions
 
+    public static function getOS()
+    {
+        return PHP_OS;
+    }
+
     public static function getMemory() 
 	{
         if(self::isWin()) {
 
         } else {
-            return trim(shell_exec("free | awk '/Mem/ {print $2}'"));
+            return trim(shell_exec("free -b | awk '/Mem/ {print $2}'"));
         }
     }
 
@@ -120,7 +125,7 @@ class System
         if(self::isWin()) {
 
         } else {
-            return trim(shell_exec("free | awk '/Mem/ {print $3}'"));
+            return trim(shell_exec("free -b | awk '/Mem/ {print $3}'"));
         }
     }
 
@@ -129,7 +134,7 @@ class System
         if(self::isWin()) {
 
         } else {
-            return trim(shell_exec("free | awk '/Mem/ {print $4}'"));
+            return trim(shell_exec("free -b | awk '/Mem/ {print $4}'"));
         }
     }
 
@@ -138,7 +143,7 @@ class System
         if(self::isWin()) {
 
         } else {
-            return trim(shell_exec("free | awk '/Mem/ {print $7}'"));
+            return trim(shell_exec("free -b | awk '/Mem/ {print $7}'"));
         }
     }
 

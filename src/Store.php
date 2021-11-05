@@ -41,18 +41,25 @@ class Store
 	*/
 	public static function get($key)
 	{
-		$_this = self::getInstance();
-		return $_this->data[$key];
+		if(self::getInstance()->has($key)) {
+			return self::getInstance()->data[$key]['value'];
+		} else {
+			return false;
+		}
 	}
 
 	/**
 	* @param string $key
 	* @param mixed $value
 	*/
-	public static function set($key, $value)
+	public static function set($key, $value, $ttl = null)
 	{
+		if(!empty($ttl)) {
+			$ttl = time() + $ttl;
+		}
+
 		$_this = self::getInstance();
-		$_this->data[$key] = $value;
+		$_this->data[$key] = array('value' => $value, 'ttl'=> $ttl);
 	}
 
 	/**
@@ -61,8 +68,17 @@ class Store
 	*/
 	public static function has($key)
 	{
-		$_this = self::getInstance();
-		return isset($_this->data[$key]);
+		if(isset(self::getInstance()->data[$key])) {
+
+			if(!empty(self::getInstance()->data[$key]['ttl'])) {
+				if(self::getInstance()->data[$key]['ttl'] < time()) {
+					unset(self::getInstance()->data[$key]);
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 
 	/**
@@ -79,8 +95,16 @@ class Store
 	*/
 	public static function all()
 	{
-		$_this = self::getInstance();
-		return $_this->data;
+
+		$data = array();
+
+		foreach(self::getInstance()->data as $key => $value) {
+			if(self::getInstance()->has($key)) {
+				$data[$key] = $value['value'];
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -88,8 +112,7 @@ class Store
 	*/
 	public static function list()
 	{
-		$_this = self::getInstance();
-		return $_this->all();
+		return self::getInstance()->all();
 	}
 
 	/**
@@ -97,8 +120,7 @@ class Store
 	*/
 	public static function keys()
 	{
-		$_this = self::getInstance();
-		return array_keys($_this->data);
+		return array_keys(self::getInstance()->all());
 	}
 
 	/**
@@ -106,8 +128,7 @@ class Store
 	*/
 	public static function count()
 	{
-		$_this = self::getInstance();
-		return count($_this->data);
+		return count(self::getInstance()->all());
 	}
 
 	/**
@@ -115,8 +136,7 @@ class Store
 	*/
 	public static function clear()
 	{
-		$_this = self::getInstance();
-		$_this->data = [];
+		self::getInstance()->datadata = [];
 	}
 
 	// TODO: Switch to internal filesystem

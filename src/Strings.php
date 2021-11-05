@@ -282,6 +282,17 @@ class Strings
         return filter_var($string, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) !== false;
     }
 
+    /**
+     * Checks if the given string contains needle.
+     *
+     * @param string $string The string to check.
+     * @return bool
+     */
+    public static function contains($string, $needle)
+    {
+        return strpos($string, $needle) !== false;
+    }
+
 	/**
 	* get content between to strings in string
 	*
