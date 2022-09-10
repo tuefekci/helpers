@@ -21,8 +21,6 @@
     },
     "type": "project",
     "require": {
-        "php": ">=7.4",
-        "psr/log":"^1.0.0",
         "league/climate": "^3.7"
     },
     "require-dev": {
